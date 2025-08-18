@@ -158,7 +158,7 @@ pipeline {
                 to: 'harishn662@gmail.com',
                 from: 'harishn662@gmail.com',
                 mimeType: 'text/html',
-                attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
+                attachmentsPattern: 'trivyfs.txt,trivy-report.json,trivy-report.txt,dependency-check-report.xml'
                     )
         }
     }
