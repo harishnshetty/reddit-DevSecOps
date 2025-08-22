@@ -116,10 +116,10 @@ pipeline {
                     echo '🔍 Running Trivy scan on ${env.IMAGE_TAG}'
 
                     # JSON report
-                    trivy image -f json -o trivy-report.json ${env.IMAGE_TAG}
+                    trivy image -f json -o trivy-image.json ${env.IMAGE_TAG}
 
                     # HTML report using built-in HTML format
-                    trivy image -f table -o trivy-report.txt ${env.IMAGE_TAG}
+                    trivy image -f table -o trivy-image.txt ${env.IMAGE_TAG}
 
                     # Fail build if HIGH/CRITICAL vulnerabilities found
                     # trivy image --exit-code 1 --severity HIGH,CRITICAL ${env.IMAGE_TAG} || true
@@ -158,7 +158,7 @@ pipeline {
                 to: 'harishn662@gmail.com',
                 from: 'harishn662@gmail.com',
                 mimeType: 'text/html',
-                attachmentsPattern: 'trivyfs.txt,trivy-report.json,trivy-report.txt,dependency-check-report.xml'
+                attachmentsPattern: 'trivyfs.txt,trivy-image.json,trivy-image.txt,dependency-check-report.xml'
                     )
         }
     }
