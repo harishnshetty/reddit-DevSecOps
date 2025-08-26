@@ -18,7 +18,9 @@ jobs:
       run: curl ipinfo.io
     - name: pro
       run: nproc
-    - name: top
-      run: top
-    - name: ps aux
-      run: ps aux   
+    - name: memory
+      run: free -h
+    - name: disk space
+      run: df- h
+    - name: pwd
+      run: pwd
