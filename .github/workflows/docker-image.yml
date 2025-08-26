@@ -21,6 +21,6 @@ jobs:
     - name: memory
       run: free -h
     - name: disk space
-      run: df- h
+      run: df -h
     - name: pwd
       run: pwd
