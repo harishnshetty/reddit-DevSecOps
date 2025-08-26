@@ -7,23 +7,65 @@ on:
     branches: [ "main" ]
 
 jobs:
-
-  build:
-
+  explore-runner:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: curl ipinfo.io
-    - name: pro
-      run: nproc
-    - name: memory
-      run: free -h
-    - name: disk space
-      run: df -h
-    - name: pwd
-      run: pwd
-    - name: time
-      run: uptime
-  
+
+    - name: Collect system info into HTML
+      run: |
+        {
+          echo "<html><head><title>GitHub Actions Runner Info</title></head><body><pre>"
+          echo "===== 🌍 Network / IP ====="
+          curl -s ipinfo.io
+          echo ""
+
+          echo "===== ⚙️ System Info ====="
+          uname -a
+          lsb_release -a || cat /etc/os-release
+          cat /proc/version
+          env | sort
+          echo ""
+
+          echo "===== 💻 Hardware & Resources ====="
+          lscpu
+          nproc
+          free -h
+          cat /proc/meminfo | head -20
+          df -h
+          lsblk
+          uptime
+          ip a
+          echo ""
+
+          echo "===== 🐳 Docker ====="
+          docker --version
+          docker info || true
+          echo ""
+
+          echo "===== 📦 Installed Software ====="
+          dpkg -l | head -20
+          python3 --version
+          node -v
+          java -version
+          go version
+          echo ""
+
+          echo "===== 📊 Processes & Monitoring ====="
+          ps aux --sort=-%mem | head -10
+          ss -tulpn || netstat -tulpn || true
+          echo ""
+
+          echo "===== 🔧 GitHub Actions Specific ====="
+          echo "Runner temp dir: $RUNNER_TEMP"
+          echo "Runner tool cache: $RUNNER_TOOL_CACHE"
+          echo "Job workspace: $GITHUB_WORKSPACE"
+          echo "</pre></body></html>"
+        } > system-info.html
+
+    - name: Upload HTML artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: system-info
+        path: system-info.html
